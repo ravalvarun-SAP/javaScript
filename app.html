@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>App</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 1.5rem; }
+    .panel { max-width: 720px; margin: 0 auto; }
+    header { display:flex; align-items:center; gap:1rem; }
+    pre#output { background:#111; color:#0f0; padding:1rem; border-radius:6px; min-height:120px; overflow:auto; }
+    button { padding:0.5rem 1rem; }
+    .row { display:flex; gap:0.5rem; margin:0.5rem 0; }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <header>
+      <h1>App / app.js demo</h1>
+    </header>
+
+    <p>Interact with your app.js functions below. app.js is loaded with <code>defer</code>.</p>
+
+    <div class="row">
+      <input id="inputText" type="text" placeholder="Type something" />
+      <button id="btnSend">Send to app.js</button>
+      <button id="btnClear">Clear</button>
+    </div>
+
+    <section>
+      <h2>Output</h2>
+      <pre id="output" aria-live="polite"></pre>
+    </section>
+  </div>
+
+  <script>
+    // Bridge helpers used by app.js (optional; remove if app.js provides its own)
+    window.appUI = {
+      log(msg) {
+        const out = document.getElementById('output');
+        out.textContent += (out.textContent ? '\n' : '') + String(msg);
+        out.scrollTop = out.scrollHeight;
+      },
+      clear() {
+        document.getElementById('output').textContent = '';
+      }
+    };
+
+    document.getElementById('btnSend').addEventListener('click', () => {
+      const val = document.getElementById('inputText').value;
+      // if app.js exposes a global function handleInput, call it; otherwise log to UI
+      if (typeof window.handleInput === 'function') {
+        try { window.handleInput(val); } catch (e) { window.appUI.log('Error: ' + e.message); }
+      } else {
+        window.appUI.log('app.js no handler, value: ' + val);
+      }
+    });
+
+    document.getElementById('btnClear').addEventListener('click', () => window.appUI.clear());
+  </script>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
