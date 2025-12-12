@@ -1,0 +1,26 @@
+/*
+let nr1 = 4;
+
+let nr3 = 2;
+
+let nr4 = nr1++ + ++nr3 + nr3++
+
+//       i++ 5      ++i 2      i++3
+console.log(nr4);
+*/
+let age = prompt("enter your age");
+let msg;
+
+switch (true) {
+    case (age >= 21):
+        msg = "Bewda Sala";
+        break;
+    case (age >= 19 && age < 21):
+        msg = "Lowde ko unde daal";
+        break;
+    default:
+        msg = "bhag bhoshdi ke";
+        break;
+}
+
+alert(msg);
